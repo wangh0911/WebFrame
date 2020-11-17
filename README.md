@@ -6,4 +6,5 @@
 3. 在WEB-INF目录下，添加web.xml文件
 
 ## 添加Java Web的maven依赖
-
+## 编写Servlet和jsp
+## 配置Tomcat
