@@ -2,10 +2,13 @@ package cn.roboteco.chapter2.helper;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.roboteco.chapter2.utils.PropUtil;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
+import java.util.List;
 import java.util.Properties;
 
 public class DatabaseHelper {
@@ -47,5 +50,21 @@ public class DatabaseHelper {
                 logger.error("close connection failure", e);
             }
         }
+    }
+
+
+    private static final QueryRunner QUERY_RUNNER = new QueryRunner();
+
+    public static <T> List<T> queryEntityList(Class<T> entityClass,Connection connection, String sql, Object... params){
+        List<T> entityList;
+        try {
+            entityList = QUERY_RUNNER.query(connection,sql,new BeanListHandler<T>(entityClass),params);
+        }catch (SQLException e){
+            logger.error(ExceptionUtil.stacktraceToString(e));
+            throw new RuntimeException(e);
+        }finally {
+            closeConnection(connection);
+        }
+        return entityList;
     }
 }
