@@ -2,6 +2,7 @@ package cn.roboteco.chapter2.service;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.roboteco.chapter2.helper.DatabaseHelper;
+import cn.roboteco.chapter2.helper.DatabaseHelperThreadLocal;
 import cn.roboteco.chapter2.model.Customer;
 import cn.roboteco.chapter2.utils.PropUtil;
 import org.slf4j.Logger;
@@ -16,13 +17,8 @@ import java.util.Properties;
 public class CustomerService {
     private static  final Logger logger = LoggerFactory.getLogger(CustomerService.class);
     public List<Customer> getCustomerList(){
-        Connection connection = DatabaseHelper.getConnection();
-        try {
-            String sql = "select * from customer";
-            return DatabaseHelper.queryEntityList(Customer.class, connection,sql);
-        }finally {
-            DatabaseHelper.closeConnection(connection);
-        }
+        String sql = "select * from customer";
+        return DatabaseHelperThreadLocal.queryEntityList(Customer.class,sql);
     }
 
 //    public List<Customer> getCustomerList(){
